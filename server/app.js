@@ -12,8 +12,20 @@ import userDatesRoutes from "./routes/userDatesRoutes.js";
 import userLeaveRoutes from "./routes/userLeaveRoutes.js";
 import userBankRoutes from "./routes/userBankRoutes.js";
 
+
+const allowedOrigins = ["http://localhost:5173", "https://fighter-management-system-2.onrender.com"];
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true); // allow this origin
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  }
+}))
 app.use(express.json());
 app.use(morgan("dev"));
 
