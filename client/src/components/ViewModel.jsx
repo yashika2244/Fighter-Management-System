@@ -419,7 +419,7 @@ export default function ViewModel({ open, onClose, user }) {
 /* ------------------ Small Reusable Components ------------------ */
 const Field = ({ label, name, value, onChange, required, icon }) => (
   <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
+    <label className="block text-sm font-medium text-gray-700 mb-1 md:flex items-center gap-1">
       {icon} {label} {required && <span className="text-red-500">*</span>}
     </label>
     <input
@@ -435,7 +435,7 @@ const Field = ({ label, name, value, onChange, required, icon }) => (
 
 const DateField = ({ label, name, value, onChange, icon }) => (
   <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
+    <label className="block text-sm font-medium text-gray-700 mb-1 md:flex items-center gap-1">
       {icon} {label}
     </label>
     <input
