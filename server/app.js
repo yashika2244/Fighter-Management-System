@@ -59,6 +59,7 @@ import duties from "./routes/DutyAssign.js";
 import userDatesRoutes from "./routes/userDatesRoutes.js";
 import userLeaveRoutes from "./routes/userLeaveRoutes.js";
 import userBankRoutes from "./routes/userBankRoutes.js";
+import leaveRoutes from "./routes/leaveRoutes.js";
 // CORS setup
 const allowedOrigins = ["http://localhost:5173", "https://fighter-management-system-2.onrender.com"];
 const app = express();
@@ -73,8 +74,6 @@ app.use(cors({
   }
 }));
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.resolve();
 
 app.use(express.json());
 app.use(morgan("dev"));
@@ -87,13 +86,9 @@ app.use("/api/user-dates", userDatesRoutes);
 app.use("/api/user-leaves", userLeaveRoutes);
 app.use("/api/user-bank", userBankRoutes);
 app.use("/api/duties", duties);
+app.use("/api/leaves", leaveRoutes);
 
-// // Serve Vite build files
-// app.use(express.static(path.join(__dirname, "client/dist")));
 
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "client/dist/index.html"));
-// });
 
 // Start server
 const port = process.env.PORT || 5000;

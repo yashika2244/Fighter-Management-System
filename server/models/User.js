@@ -17,7 +17,6 @@ const UserSchema = new mongoose.Schema(
     nok: { type: String }, // Next of Kin
     icardNo: { type: String },
 
-    // Extra: agar role-based access chahiye toh rakh lo
     role: {
       type: String,
       enum: [
@@ -33,6 +32,12 @@ const UserSchema = new mongoose.Schema(
     },
 
     active: { type: Boolean, default: true },
+
+    // 🔑 Leave fields
+    elTotal: { type: Number, default: 60 },
+    elUsed: { type: Number, default: 0 },
+    clTotal: { type: Number, default: 15 },
+    clUsed: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
