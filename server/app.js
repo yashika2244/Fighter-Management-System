@@ -59,7 +59,6 @@ import duties from "./routes/DutyAssign.js";
 import userDatesRoutes from "./routes/userDatesRoutes.js";
 import userLeaveRoutes from "./routes/userLeaveRoutes.js";
 import userBankRoutes from "./routes/userBankRoutes.js";
-
 // CORS setup
 const allowedOrigins = ["http://localhost:5173", "https://fighter-management-system-2.onrender.com"];
 const app = express();
@@ -90,12 +89,15 @@ app.use("/api/duties", duties);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use(express.static(path.join(__dirname, "client/build")));
+
+
+
+// Serve React frontend (Vite output)
+app.use(express.static(path.join(__dirname, "client/dist")));
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client/build", "index.html"));
+  res.sendFile(path.join(__dirname, "client/dist", "index.html"));
 });
-
 // Start server
 const port = process.env.PORT || 5000;
 connectDB().then(() => {
