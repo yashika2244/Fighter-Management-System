@@ -4,8 +4,12 @@ const r = Router();
 
 // create
 r.post("/", async (req,res)=> {
+    console.log("Received body:", req.body); 
   try { const doc = await User.create(req.body); res.json(doc); }
-  catch(e){ res.status(400).json({message:e.message}); }
+  catch(e){
+    console.error("Error creating user:", e.message); // backend me exact reason log hoga
+    res.status(400).json({ message: e.message }); // frontend me bhi dikhayega
+  }
 });
 
 // list + search

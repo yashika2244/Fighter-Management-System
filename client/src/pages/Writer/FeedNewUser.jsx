@@ -42,6 +42,7 @@ const [userId, setUserId] = useState(null);
   // ----------------- Submits -------------------
   const submit = async (e) => {
     e.preventDefault();
+     console.log("Submitting form:", form);
     try {
       const { data } = await api.post("/users", form);
         setUserId(data._id);

@@ -73,6 +73,9 @@ app.use(cors({
   }
 }));
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 app.use(express.json());
 app.use(morgan("dev"));
 
@@ -84,7 +87,12 @@ app.use("/api/user-dates", userDatesRoutes);
 app.use("/api/user-leaves", userLeaveRoutes);
 app.use("/api/user-bank", userBankRoutes);
 app.use("/api/duties", duties);
+app.use(express.static(path.join(__dirname, 'client/build')));
 
+// Catch-all route: send index.html for all non-API requests
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+});
 
 // Start server
 const port = process.env.PORT || 5000;
