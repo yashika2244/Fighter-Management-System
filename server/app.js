@@ -73,8 +73,8 @@ app.use(cors({
   }
 }));
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.resolve();
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.resolve();
 
 app.use(express.json());
 app.use(morgan("dev"));
@@ -88,12 +88,12 @@ app.use("/api/user-leaves", userLeaveRoutes);
 app.use("/api/user-bank", userBankRoutes);
 app.use("/api/duties", duties);
 
-// Serve Vite build files
-app.use(express.static(path.join(__dirname, "client/dist")));
+// // Serve Vite build files
+// app.use(express.static(path.join(__dirname, "client/dist")));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client/dist/index.html"));
-});
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "client/dist/index.html"));
+// });
 
 // Start server
 const port = process.env.PORT || 5000;
