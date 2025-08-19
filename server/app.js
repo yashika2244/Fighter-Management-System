@@ -85,19 +85,7 @@ app.use("/api/user-leaves", userLeaveRoutes);
 app.use("/api/user-bank", userBankRoutes);
 app.use("/api/duties", duties);
 
-// Serve React frontend
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
-
-
-
-// Serve React frontend (Vite output)
-app.use(express.static(path.join(__dirname, "client/dist")));
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client/dist", "index.html"));
-});
 // Start server
 const port = process.env.PORT || 5000;
 connectDB().then(() => {
