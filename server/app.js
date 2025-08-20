@@ -56,9 +56,9 @@ import users from "./routes/users.js";
 import availability from "./routes/availability.js";
 import upload from "./routes/upload.js";
 import duties from "./routes/DutyAssign.js";
-import userDatesRoutes from "./routes/userDatesRoutes.js";
-import userLeaveRoutes from "./routes/userLeaveRoutes.js";
-import userBankRoutes from "./routes/userBankRoutes.js";
+// import userDatesRoutes from "./routes/userDatesRoutes.js";
+// import userLeaveRoutes from "./routes/userLeaveRoutes.js";
+// import userBankRoutes from "./routes/userBankRoutes.js";
 import leaveRoutes from "./routes/leaveRoutes.js";
 // CORS setup
 const allowedOrigins = ["http://localhost:5173", "https://fighter-management-system-2.onrender.com"];
@@ -82,9 +82,9 @@ app.use(morgan("dev"));
 app.use("/api/users", users);
 app.use("/api/availability", availability);
 app.use("/api/upload", upload);
-app.use("/api/user-dates", userDatesRoutes);
-app.use("/api/user-leaves", userLeaveRoutes);
-app.use("/api/user-bank", userBankRoutes);
+// app.use("/api/user-dates", userDatesRoutes);
+// app.use("/api/user-leaves", userLeaveRoutes);
+// app.use("/api/user-bank", userBankRoutes);
 app.use("/api/duties", duties);
 app.use("/api/leaves", leaveRoutes);
 

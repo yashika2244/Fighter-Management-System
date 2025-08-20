@@ -1,6 +1,11 @@
 import Topbar from "../components/Topbar";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
+import PageCard from "../components/PageCard"
 const CompanyCommanderPage = () => {
+    const nav = useNavigate();
+  const [openAvailability, setOpenAvailability] = useState(false);
   return (
       <div className="px-4">
         <div className="flex justify-between items-center
@@ -15,6 +20,7 @@ const CompanyCommanderPage = () => {
           <div className="p-6 rounded bg-gray-100 text-center ">Open Dashboard</div>
           <div className="p-6 rounded bg-gray-100 text-center " >Search /Browser Users</div>
           <div className="p-6 rounded bg-gray-100 text-center ">Availability on Date</div>
+          
         </div>
       </div>
   )

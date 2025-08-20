@@ -10,3 +10,4 @@ const AvailabilitySchema = new mongoose.Schema(
 );
 AvailabilitySchema.index({ user:1, date:1 }, { unique:true });
 export default mongoose.model("Availability", AvailabilitySchema);
+

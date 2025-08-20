@@ -4,6 +4,8 @@ import Topbar from "../../components/Topbar";
 import { Search, RotateCcw, Edit, FileDown, Calendar } from "lucide-react";
 import ViewModel from "../../components/ViewModel";
 import LeaveModal from "../../components/LeaveModal";
+import { Upload } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function LookForUser() {
   const [q, setQ] = useState("");
@@ -31,6 +33,11 @@ export default function LookForUser() {
   useEffect(() => {
     load();
   }, []);
+  const updateRow = (updatedUser) => {
+    setRows((prev) =>
+      prev.map((r) => (r._id === updatedUser._id ? updatedUser : r))
+    );
+  };
 
   return (
     <div className="p-6 min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
@@ -149,20 +156,68 @@ export default function LookForUser() {
           open={openModal}
           onClose={() => setOpenModal(false)}
           user={rows[selectedRow]}
+          onSave={(updatedUser) => {
+            const newRows = [...rows];
+            newRows[selectedRow] = updatedUser; // updated row replace
+            setRows(newRows);
+            toast.success("User updated successfully!");
+          }}
         />
         <button
-         onClick={() => {
+          onClick={() => {
             if (selectedRow !== null) setOpenLeaveModal(true);
-          }} className="flex items-center justify-center gap-2 bg-gray-300  py-3 rounded-xl shadow hover:bg-gray-200 cursor-pointer transition">
+          }}
+          className="flex items-center justify-center gap-2 bg-gray-300  py-3 rounded-xl shadow hover:bg-gray-200 cursor-pointer transition"
+        >
           <Calendar size={18} /> Leaves...
         </button>
-          <LeaveModal
+        <LeaveModal
           open={openLeaveModal}
           onClose={() => setOpenLeaveModal(false)}
           user={rows[selectedRow]}
         />
-        <button className="flex items-center justify-center gap-2 bg-gray-300  py-3 rounded-xl shadow hover:bg-gray-200 cursor-pointer transition">
-          <FileDown size={18} /> Export CSV
+        <input
+          type="file"
+          id="fileInput"
+          accept=".csv,.xlsx"
+          className="hidden"
+          onChange={async (e) => {
+            if (!e.target.files[0]) return;
+
+            const formData = new FormData();
+            formData.append("file", e.target.files[0]);
+
+            try {
+              setLoading(true);
+              const res = await api.post("/upload/import", formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+              });
+
+              // Reload table after successful import
+              load();
+
+              toast.success(
+                `✅ ${res.data.message} (${res.data.imported} imported, ${res.data.skipped} skipped)`
+              );
+            } catch (err) {
+              console.error(err);
+              toast.error(
+                `❌ Import Failed: ${
+                  err.response?.data?.message || err.message
+                }`
+              );
+            } finally {
+              setLoading(false);
+              e.target.value = ""; // reset file input
+            }
+          }}
+        />
+
+        <button
+          onClick={() => document.getElementById("fileInput").click()}
+          className="flex items-center justify-center gap-2 bg-green-500 text-white py-3 rounded-xl shadow hover:bg-green-600 cursor-pointer transition"
+        >
+          <Upload size={18} /> Import Users
         </button>
       </div>
     </div>
