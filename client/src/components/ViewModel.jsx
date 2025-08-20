@@ -492,7 +492,11 @@
 //   </div>
 // );
 
+
+
 import { useEffect, useState } from "react";
+import { api } from "../lib/axios";
+console.log("api is ", api)
 import axios from "axios";
 import {
   User,
@@ -504,10 +508,23 @@ import {
   Briefcase,
 } from "lucide-react";
 
+
+const formatDate = (dateStr) => {
+  if (!dateStr) return "";
+  try {
+    return new Date(dateStr).toISOString().split("T")[0]; // "yyyy-MM-dd"
+  } catch {
+    return "";
+  }
+};
+
 export default function ViewModel({ open, onClose, user, onSave }) {
   const [form, setForm] = useState(user || {});
   const [activeTab, setActiveTab] = useState("Identity");
-  const API_BASE = "http://localhost:5000/api"; // Backend URL
+
+
+
+
 
   useEffect(() => {
     setForm(user || {});
@@ -535,6 +552,7 @@ export default function ViewModel({ open, onClose, user, onSave }) {
     "Other",
     "Readiness",
   ];
+
 
   return (
     <div className="fixed inset-0 bg-transparent/50 backdrop-blur-sm flex items-center justify-center z-50">
@@ -698,24 +716,41 @@ export default function ViewModel({ open, onClose, user, onSave }) {
 
           <button
             className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium shadow-md transition"
+            // onClick={async () => {
+            //   try {
+            //     let res;
+            //     if (form._id) {
+            //       res = await axios.put(`${API_BASE}/users/${form._id}`, form);
+            //     } else {
+            //       res = await axios.post(`${API_BASE}/users`, form);
+            //     }
+            //     if (onSave) onSave(res.data);
+            //     onClose();
+            //   } catch (err) {
+            //     console.error("Error saving user:", err);
+            //     alert("Failed to save user. Check console.");
+            //   }
+            // }}
             onClick={async () => {
-              try {
-                let res;
-                if (form._id) {
-                  res = await axios.put(`${API_BASE}/users/${form._id}`, form);
-                } else {
-                  res = await axios.post(`${API_BASE}/users`, form);
-                }
-                if (onSave) onSave(res.data);
-                onClose();
-              } catch (err) {
-                console.error("Error saving user:", err);
-                alert("Failed to save user. Check console.");
-              }
-            }}
+  try {
+    let res;
+    if (form._id) {
+      res = await api.put(`/users/${form._id}`, form);
+    } else {
+      res = await api.post(`/users`, form);
+    }
+    if (onSave) onSave(res.data);
+    onClose();
+  } catch (err) {
+    console.error("Error saving user:", err);
+    alert("Failed to save user. Check console.");
+  }
+}}
+
           >
             Save
           </button>
+          
         </div>
       </div>
     </div>
@@ -746,7 +781,8 @@ const DateField = ({ label, name, value, onChange, icon }) => (
     <input
       type="date"
       name={name}
-      value={value || ""}
+      // value={value || ""}
+      value={formatDate(value)} 
       onChange={onChange}
       className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
     />
