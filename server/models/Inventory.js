@@ -7,6 +7,7 @@ const inventorySchema = new mongoose.Schema({
   qty: { type: Number, default: 0 },
   minQty: { type: Number, default: 0 },
   location: { type: String },
+  notes:{type:String},
   createdAt: { type: Date, default: Date.now },
 });
 

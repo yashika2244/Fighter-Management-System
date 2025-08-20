@@ -19,9 +19,9 @@ router.get("/", async (req, res) => {
 
 // Add new item
 router.post("/", async (req, res) => {
-  const { name, sku, unit, qty, minQty, location } = req.body;
+  const { name, sku, unit, qty, minQty, location, notes} = req.body;
   try {
-    const newItem = await Inventory.create({ name, sku, unit, qty, minQty, location });
+    const newItem = await Inventory.create({ name, sku, unit, qty, minQty, location,notes});
     res.status(201).json(newItem);
   } catch (err) {
     res.status(400).json({ message: err.message });
