@@ -7,6 +7,8 @@ export default function DutyAssign() {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [users, setUsers] = useState([]);
   const [duties, setDuties] = useState([]);
+  const [dutyTypes, setDutyTypes] = useState([]);
+  const [availableUsers, setAvailableUsers] = useState([]);
   
   const [form, setForm] = useState({
     user: "",
@@ -24,6 +26,8 @@ export default function DutyAssign() {
   useEffect(() => {
     loadUsers();
     loadDuties();
+    loadAvailability();
+    loadDutyTypes();
   }, [date]);
 
   useEffect(() => {
@@ -39,6 +43,26 @@ export default function DutyAssign() {
   const loadDuties = async () => {
     const { data } = await api.get("/duties", { params: { date } });
     setDuties(data);
+  };
+
+  const loadAvailability = async () => {
+    try {
+      const { data } = await api.get("/availability/on-date", { params: { date } });
+      setAvailableUsers(data.available || []);
+    } catch (e) {
+      console.error(e);
+      setAvailableUsers([]);
+    }
+  };
+
+  const loadDutyTypes = async () => {
+    try {
+      const { data } = await api.get("/duties/types");
+      setDutyTypes(data.filter((t) => t.active !== false));
+    } catch (e) {
+      // fallback: no types yet
+      setDutyTypes([]);
+    }
   };
 
 const loadSubCategories = async (dutyType) => {
@@ -128,10 +152,10 @@ const loadSubCategories = async (dutyType) => {
               onChange={(e) => setForm({ ...form, user: e.target.value })}
               className="peer block w-full rounded-md border border-gray-300 bg-gray-50 px-4 pt-5 pb-2 text-sm text-gray-900 shadow-sm focus:ring-1 focus:ring-indigo-400 focus:border-indigo-500 transition"
             >
-              <option value="">Select Personnel</option>
-              {users.map((u) => (
-                <option key={u._id} value={u._id}>
-                  {u.serviceNo} {u.rank} {u.name}
+              <option value="">Select Personnel (Available)</option>
+              {availableUsers.map((u) => (
+                <option key={u.id} value={u.id}>
+                  {u.forceNo} {u.rank} {u.name}
                 </option>
               ))}
             </select>
@@ -144,18 +168,16 @@ const loadSubCategories = async (dutyType) => {
           <div className="relative">
             <select
               value={form.dutyType}
-  onChange={(e) => {
-    setForm((prev) => ({ ...prev, dutyType: e.target.value })); // 👈 safe update
-    loadSubCategories(e.target.value);
+              onChange={(e) => {
+                setForm((prev) => ({ ...prev, dutyType: e.target.value }));
+                loadSubCategories(e.target.value);
               }}
               className="peer block w-full rounded-md border border-gray-300 bg-gray-50 px-4 pt-5 pb-2 text-sm text-gray-900 shadow-sm focus:ring-1 focus:ring-indigo-400 focus:border-indigo-500 transition outline-none"
             >
               <option value="">Select Duty</option>
-              <option value="Naka Duty">Naka Duty</option>
-              <option value="Minority Patroling">Minority Patroling</option>
-              <option value="Camp Security">Camp Security</option>
-              <option value="Camp Adm Duty">Camp Adm Duty</option>
-              <option value="OC Protection Duty">OC Protection Duty</option>
+              {dutyTypes.map((t) => (
+                <option key={t._id} value={t.name}>{t.name}</option>
+              ))}
             </select>
             <label className="absolute left-5 top-2 text-gray-500 text-xs transition-all peer-focus:top-2 peer-focus:text-xs">
               Duty Type
