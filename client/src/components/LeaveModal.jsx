@@ -31,7 +31,7 @@ export default function LeaveModal({ open, onClose, user, refreshUser }) {
     if (!form.from || !form.to || !form.reason) return;
     try {
       const { data } = await api.post("/leaves", { ...form, user: user._id });
-      setLeaves([...leaves, data]);
+       setLeaves([...leaves, data.leave]);  
       setForm({ from: "", to: "", type: "EL", reason: "" });
       refreshUser?.(); // refresh EL/CL counts if needed
     } catch (err) {
