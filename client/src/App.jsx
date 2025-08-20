@@ -54,6 +54,7 @@ import CompanyCommanderPage from "./pages/CompanyCommanderPage.jsx";
 import BackToRoleSelect from "./pages/BackToRoleSelect.jsx";
 import { Toaster } from "react-hot-toast";
 import ResponsiveWrapper from "./components/ResponsiveWrapper.jsx";
+import CQMH from "./pages/CQMH.jsx";
 
 function Layout() {
   return (
@@ -78,6 +79,7 @@ function Layout() {
           {/* Other roles */}
           <Route path="/chm" element={<ChmPage />} />
           <Route path="/company-commander" element={<CompanyCommanderPage />} />
+          <Route path="//cqmh" element={<CQMH/>} />
           <Route path="/back" element={<BackToRoleSelect />} />
 
           {/* <Route path="/messso" element={<MessSOPage />} /> */}

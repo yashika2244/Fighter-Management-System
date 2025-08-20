@@ -12,8 +12,8 @@ import users from "./routes/users.js";
 import availability from "./routes/availability.js";
 import upload from "./routes/upload.js";
 import duties from "./routes/DutyAssign.js";
-
 import leaveRoutes from "./routes/leaveRoutes.js";
+import inventoryRoutes from "./routes/Inventory.js"
 // CORS setup
 const allowedOrigins = ["http://localhost:5173", "https://fighter-management-system-2.onrender.com"];
 const app = express();
@@ -40,11 +40,10 @@ app.get("/", (req, res) => {
 app.use("/api/users", users);
 app.use("/api/availability", availability);
 app.use("/api/upload", upload);
-// app.use("/api/user-dates", userDatesRoutes);
-// app.use("/api/user-leaves", userLeaveRoutes);
-// app.use("/api/user-bank", userBankRoutes);
+
 app.use("/api/duties", duties);
 app.use("/api/leaves", leaveRoutes);
+app.use("/api/inventory", inventoryRoutes);
 
 
 
