@@ -60,6 +60,7 @@ import { AuthProvider } from "./contexts/AuthContext.jsx";
 import LoginForm from "./components/LoginForm.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import AdminManagement from "./pages/AdminManagement.jsx";
+import MessCommander from "./pages/MessCommander.jsx";
 
 function Layout() {
   return (
@@ -129,6 +130,11 @@ function Layout() {
           <Route path="/admin" element={
             <ProtectedRoute allowedRoles={["SuperAdmin"]}>
               <AdminManagement />
+            </ProtectedRoute>
+          } />
+  <Route path="/mess" element={
+            <ProtectedRoute allowedRoles={["CompanyCommander", "Commander", "SuperAdmin"]}>
+              <MessCommander/>
             </ProtectedRoute>
           } />
           

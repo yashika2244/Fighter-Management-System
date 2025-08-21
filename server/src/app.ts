@@ -13,6 +13,7 @@ import leaveRoutes from "./routes/leaveRoutes";
 import auth from "./routes/auth";
 import admin from "./routes/admin";
 import inventory from "./routes/inventory";
+import meals from "./routes/mealRoutes";
 import { requireAuth, requireRole } from "./middleware/auth";
 import { errorHandler, notFound } from "./middleware/error";
 
@@ -81,7 +82,9 @@ app.use("/api/duties", ...dutiesGuards, duties);
 // Inventory → CQMH, CompanyCommander, Commander, SuperAdmin (if enforced)
 const inventoryGuards = enforce ? [requireAuth(), requireRole(["CQMH","CompanyCommander","Commander","SuperAdmin"])] : [];
 app.use("/api/inventory", ...inventoryGuards, inventory);
-
+// Meals → MessSO, CompanyCommander, SuperAdmin (if enforced)
+const mealsGuards = enforce ? [requireAuth(), requireRole(["MessSO","CompanyCommander","SuperAdmin"])] : [];
+app.use("/api/meals", ...mealsGuards, meals);
 // Admin management → SuperAdmin only (if enforced)
 const adminGuards = enforce ? [requireAuth(), requireRole(["SuperAdmin"])] : [];
 app.use("/api/admin", ...adminGuards, admin);
