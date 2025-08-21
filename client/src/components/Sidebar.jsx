@@ -1,22 +1,48 @@
 
 
 import { NavLink } from "react-router-dom";
-import { Menu } from "lucide-react";
+import { Menu, LogOut } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "../contexts/AuthContext.jsx";
 
 const links = [
-  
-  { to: "/dashboard", label: "Dashboard" }, // ✅ Dashboard alag route
-  { to: "/writer", label: "Writer" },
-  { to: "/company-commander", label: "Company Commander" },
-  { to: "/chm", label: "CHM (Duty Assign)" },
-  { to: "/cqmh", label: "CQMH (Inventory)" },
-  { to: "/mess", label: "Mess SO/Commander" },
+  { to: "/dashboard", label: "Dashboard" },
+  { 
+    to: "/writer", 
+    label: "Writer",
+    allowedRoles: ["Writer", "CompanyCommander", "CHM", "CQMH", "MessSO", "Commander", "SuperAdmin"]
+  },
+  // { 
+  //   to: "/company-commander", 
+  //   label: "Company Commander",
+  //   allowedRoles: ["CompanyCommander", "Commander", "SuperAdmin"]
+  // },
+  { 
+    to: "/chm", 
+    label: "CHM (Duty Assign)",
+    allowedRoles: ["CHM", "CompanyCommander", "Commander", "SuperAdmin"]
+  },
+  { 
+    to: "/cqmh", 
+    label: "CQMH (Inventory)",
+    allowedRoles: ["CQMH", "CompanyCommander", "Commander", "SuperAdmin"]
+  },
+  { 
+    to: "/mess", 
+    label: "Mess SO/Commander",
+    allowedRoles: ["MessSO", "CompanyCommander", "Commander", "SuperAdmin"]
+  },
+  { 
+    to: "/admin", 
+    label: "Admin Management",
+    allowedRoles: ["SuperAdmin"]
+  },
   { to: "/back", label: "Back to Role select" },
 ];
 
 export default function Sidebar() {
   const [open, setOpen] = useState(false);
+  const { user, logout, hasRole } = useAuth();
 
   return (
     <>
@@ -31,25 +57,46 @@ export default function Sidebar() {
 
         {/* ✅ Desktop me Home link nhi hoga */}
         <nav className="flex-1 flex flex-col gap-2">
-          {links.map((l) => (
-            <NavLink
-              key={l.to}
-              to={l.to}
-              className={({ isActive }) =>
-                `flex items-center px-4 py-2 rounded-lg text-sm transition-all duration-200 font-medium ${
-                  isActive
-                    ? "bg-cyan-700 text-white shadow"
-                    : "text-gray-700 hover:bg-gray-100 hover:text-cyan-800"
-                }`
-              }
-            >
-              {l.label}
-            </NavLink>
-          ))}
+          {links.map((l) => {
+            // Check if user has permission for this route
+            const hasPermission = l.allowedRoles ? hasRole(l.allowedRoles) : true;
+            
+            if (!hasPermission) return null;
+            
+            return (
+              <NavLink
+                key={l.to}
+                to={l.to}
+                className={({ isActive }) =>
+                  `flex items-center px-4 py-2 rounded-lg text-sm transition-all duration-200 font-medium ${
+                    isActive
+                      ? "bg-cyan-700 text-white shadow"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-cyan-800"
+                  }`
+                }
+              >
+                {l.label}
+              </NavLink>
+            );
+          })}
         </nav>
 
-        <div className="mt-auto text-gray-400 text-xs">
-          © 2025 FMS. All rights reserved.
+        <div className="mt-auto">
+          <div className="text-gray-400 text-xs mb-2">
+            © 2025 FMS. All rights reserved.
+          </div>
+          {user && (
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-gray-600">{user.name}</span>
+              <button
+                onClick={logout}
+                className="p-1 text-gray-500 hover:text-red-600 transition-colors"
+                title="Logout"
+              >
+                <LogOut size={16} />
+              </button>
+            </div>
+          )}
         </div>
       </aside>
 
@@ -82,23 +129,29 @@ export default function Sidebar() {
           Home
             </NavLink>
 
-            {/* ✅ Baaki links */}
-            {links.map((l) => (
-              <NavLink
-                key={l.to}
-                to={l.to}
-                onClick={() => setOpen(false)}
-                className={({ isActive }) =>
-                  `px-4 py-2 rounded-md text-sm font-medium ${
-                    isActive
-                      ? "bg-cyan-700 text-white"
-                      : "text-gray-700 hover:bg-gray-100 hover:text-cyan-800"
-                  }`
-                }
-              >
-                {l.label}
-              </NavLink>
-            ))}
+            {/* Baaki links */}
+            {links.map((l) => {
+              const hasPermission = l.allowedRoles ? hasRole(l.allowedRoles) : true;
+              
+              if (!hasPermission) return null;
+              
+              return (
+                <NavLink
+                  key={l.to}
+                  to={l.to}
+                  onClick={() => setOpen(false)}
+                  className={({ isActive }) =>
+                    `px-4 py-2 rounded-md text-sm font-medium ${
+                      isActive
+                        ? "bg-cyan-700 text-white"
+                        : "text-gray-700 hover:bg-gray-100 hover:text-cyan-800"
+                    }`
+                  }
+                >
+                  {l.label}
+                </NavLink>
+              );
+            })}
           </nav>
         )}
       </div>
